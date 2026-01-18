@@ -22,10 +22,10 @@
             --text-primary: #ffffff;
             --text-secondary: #a0a0a0;
             --accent-glow: rgba(255, 255, 255, 0.08);
-            --lab-accent: #00e5ff; /* Cyan accent for Software Lab */
+            --lab-accent: #00e5ff; 
             
             /* Sizing */
-            --nav-height: 80px;
+            --nav-height: 70px;
             --spacing-container: 2rem;
             
             --transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -39,7 +39,6 @@
 
         html {
             scroll-behavior: smooth;
-            /* Critical Fix: Ensures scroll doesn't hide behind nav */
             scroll-padding-top: var(--nav-height); 
         }
 
@@ -59,10 +58,9 @@
             padding: 0 var(--spacing-container);
         }
 
-        /* Fix: Min-height ensures sections fill screen nicely */
         .section {
-            min-height: 90vh; 
-            padding: 4rem 0;
+            min-height: 90vh; /* Ensures full screen feel */
+            padding: 5rem 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -104,7 +102,7 @@
             top: 0;
             width: 100%;
             height: var(--nav-height);
-            background: rgba(5, 5, 5, 0.9);
+            background: rgba(5, 5, 5, 0.95);
             backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
             z-index: 1000;
@@ -127,13 +125,15 @@
 
         .nav-links {
             display: flex;
-            gap: 2.5rem;
+            gap: 2rem;
         }
 
         .nav-links a {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .nav-links a:hover {
@@ -142,7 +142,7 @@
 
         /* --- Hero --- */
         .hero {
-            min-height: 100vh; /* Full screen hero */
+            min-height: 100vh;
             padding-top: var(--nav-height);
             display: flex;
             align-items: center;
@@ -158,12 +158,12 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- Stats Bar (Old Numbering System) --- */
+        /* --- Stats Bar (Animated) --- */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1rem;
-            margin-top: 4rem;
+            margin-top: 5rem;
             padding-top: 2rem;
             border-top: 1px solid var(--border-color);
         }
@@ -171,6 +171,11 @@
         .stat-item h3 {
             font-size: 2.5rem;
             font-weight: 300;
+            display: flex; /* Aligns number and plus sign */
+        }
+        
+        .counter {
+            display: inline-block;
         }
 
         .stat-item p {
@@ -200,7 +205,6 @@
             transition: var(--transition);
         }
 
-        /* The Glow Effect */
         .spotlight-card::before {
             content: "";
             position: absolute;
@@ -236,13 +240,11 @@
         
         .project-link:hover { text-decoration: underline; }
 
-        /* --- Lab Highlight (Special Style) --- */
+        /* --- Lab Highlight --- */
         .lab-card {
             border: 1px solid rgba(0, 229, 255, 0.2);
             background: linear-gradient(180deg, rgba(0,229,255,0.02) 0%, rgba(0,0,0,0) 100%);
         }
-        
-        .lab-card h3 { color: #fff; }
         .lab-card .section-tag { color: var(--lab-accent); }
 
         /* --- Buttons --- */
@@ -278,12 +280,12 @@
         .btn-whatsapp { background: #25D366; color: white; border: none; }
         .btn-whatsapp:hover { background: #20b857; }
 
-        /* --- Responsive --- */
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
+        /* --- Mobile Optimization --- */
+        @media (max-width: 900px) {
+            .nav-links { display: none; } /* Simplified menu for mobile */
             .hero-title { font-size: 3.5rem; }
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
-            .section { padding: 3rem 0; min-height: auto; } /* Allow flexible height on mobile */
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
+            .section { padding: 4rem 0; min-height: auto; /* Remove fixed height for safety on mobile */ } 
             .btn { width: 100%; }
         }
     </style>
@@ -295,10 +297,11 @@
             <a href="#" class="logo">H24 CREATIONZ</a>
             <div class="nav-links">
                 <a href="#lab">The Lab</a>
-                <a href="#clients">Clients</a>
+                <a href="#clients">Work</a>
+                <a href="#design">Design</a>
                 <a href="#mobile">Apps</a>
                 <a href="#books">Books</a>
-                <a href="#design">Design</a>
+                <a href="#contact">Contact</a>
             </div>
             <a href="https://wa.me/918667701001" target="_blank" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
                 Let's Talk <i data-feather="message-circle" style="width: 14px;"></i>
@@ -315,25 +318,25 @@
             </p>
             
             <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <a href="#clients" class="btn btn-primary">View Work</a>
-                <a href="#contact" class="btn btn-outline">Contact Me</a>
+                <a href="#clients" class="btn btn-primary">View Portfolio</a>
+                <a href="#contact" class="btn btn-outline">Start Conversation</a>
             </div>
 
-            <div class="stats-grid">
+            <div class="stats-grid" id="stats-section">
                 <div class="stat-item">
-                    <h3>5+</h3>
+                    <h3><span class="counter" data-target="5">0</span>+</h3>
                     <p>Years Experience</p>
                 </div>
                 <div class="stat-item">
-                    <h3>20+</h3>
+                    <h3><span class="counter" data-target="20">0</span>+</h3>
                     <p>Projects Done</p>
                 </div>
                 <div class="stat-item">
-                    <h3>10+</h3>
+                    <h3><span class="counter" data-target="10">0</span>+</h3>
                     <p>Apps Published</p>
                 </div>
                 <div class="stat-item">
-                    <h3>2</h3>
+                    <h3><span class="counter" data-target="2">0</span></h3>
                     <p>Books Authored</p>
                 </div>
             </div>
@@ -362,7 +365,7 @@
     <section id="clients" class="section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Deployed Projects</span>
+                <span class="section-tag">Service Work</span>
                 <h2>Client Success Stories</h2>
             </div>
             
@@ -403,28 +406,6 @@
         </div>
     </section>
 
-    <section id="mobile" class="section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">H24 Products</span>
-                <h2>Mobile Applications</h2>
-            </div>
-
-            <div class="spotlight-card" style="padding: 3rem;">
-                <div class="card-content" style="text-align: center; align-items: center;">
-                    <i data-feather="smartphone" style="width: 48px; height: 48px; margin-bottom: 1rem; color: #fff;"></i>
-                    <h3 style="font-size: 2rem; margin-bottom: 1rem;">The Play Store Collection</h3>
-                    <p style="max-width: 600px; color: #999; margin-bottom: 2rem;">
-                        Over 10 published applications including <strong>Confident Candidate</strong> (Education) and <strong>Aegan</strong> (Gaming). Focused on utility, productivity, and user experience.
-                    </p>
-                    <a href="https://play.google.com/store/apps/dev?id=8039460198278259208" target="_blank" class="btn btn-primary">
-                        View Play Store Profile <i data-feather="external-link"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section id="design" class="section">
         <div class="container">
             <div class="section-header">
@@ -444,6 +425,28 @@
                     </div>
                     <a href="https://drive.google.com/drive/folders/1gS8AA5x-DoGLNGvXPDyXu_a4bJl2q08c?usp=sharing" target="_blank" class="btn btn-outline" style="border-style: dashed;">
                         Open Drive Folder <i data-feather="hard-drive"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="mobile" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">H24 Products</span>
+                <h2>Mobile Applications</h2>
+            </div>
+
+            <div class="spotlight-card" style="padding: 3rem;">
+                <div class="card-content" style="text-align: center; align-items: center;">
+                    <i data-feather="smartphone" style="width: 48px; height: 48px; margin-bottom: 1rem; color: #fff;"></i>
+                    <h3 style="font-size: 2rem; margin-bottom: 1rem;">The Play Store Collection</h3>
+                    <p style="max-width: 600px; color: #999; margin-bottom: 2rem;">
+                        Over 10 published applications including <strong>Confident Candidate</strong> (Education) and <strong>Aegan</strong> (Gaming). Focused on utility, productivity, and user experience.
+                    </p>
+                    <a href="https://play.google.com/store/apps/dev?id=8039460198278259208" target="_blank" class="btn btn-primary">
+                        View Play Store Profile <i data-feather="external-link"></i>
                     </a>
                 </div>
             </div>
@@ -483,7 +486,7 @@
         </div>
     </section>
 
-    <section id="contact" class="section" style="border: none; min-height: 80vh;">
+    <section id="contact" class="section" style="border: none;">
         <div class="container">
             <div class="spotlight-card" style="text-align: center; padding: 4rem 2rem;">
                 <div class="card-content" style="align-items: center;">
@@ -523,10 +526,10 @@
     </section>
 
     <script>
-        // Icons
+        // 1. Initialize Feather Icons
         feather.replace();
 
-        // Spotlight Effect
+        // 2. Spotlight Mouse Effect
         const cards = document.querySelectorAll('.spotlight-card');
         cards.forEach(card => {
             card.addEventListener('mousemove', e => {
@@ -537,6 +540,43 @@
                 card.style.setProperty('--mouse-y', `${y}px`);
             });
         });
+
+        // 3. Number Counter Animation using Intersection Observer
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; // The lower the slower
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    
+                    // Lower increment makes it animate smoother
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 25); // Speed of animation
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+        };
+
+        // Trigger animation only when section is visible
+        const statsSection = document.querySelector('#stats-section');
+        const observer = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting) {
+                animateCounters();
+                observer.unobserve(statsSection); // Only animate once
+            }
+        }, { threshold: 0.5 }); // Trigger when 50% visible
+
+        if(statsSection) {
+            observer.observe(statsSection);
+        }
     </script>
 </body>
 </html>
