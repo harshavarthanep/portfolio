@@ -8,27 +8,24 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     
     <script src="https://unpkg.com/feather-icons"></script>
 
     <style>
         :root {
-            /* Zen Dark Theme Palette */
-            --bg-color: #080808;
-            --surface-color: #111111;
-            --surface-hover: #1a1a1a;
-            --border-color: #2a2a2a;
-            --text-primary: #f0f0f0;
-            --text-secondary: #888888;
-            --accent-color: #ffffff; 
-            --accent-subtle: #444444;
+            /* Theme Variables */
+            --bg-color: #050505;
+            --surface-color: #101010;
+            --border-color: #222;
+            --text-primary: #ffffff;
+            --text-secondary: #999999;
+            --accent-glow: rgba(255, 255, 255, 0.1);
             
-            --spacing-sm: 1rem;
-            --spacing-md: 2rem;
-            --spacing-lg: 4rem;
+            --spacing-container: 2rem;
             
-            --transition: 0.3s ease-in-out;
+            /* Animation */
+            --transition: 0.3s ease;
         }
 
         * {
@@ -45,41 +42,41 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
-            line-height: 1.7;
+            line-height: 1.6;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- Layout & Utilities --- */
+        /* --- Utilities --- */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 var(--spacing-md);
+            padding: 0 var(--spacing-container);
         }
 
         .section {
-            padding: 6rem 0;
+            padding: 5rem 0;
             border-bottom: 1px solid var(--border-color);
         }
 
-        .section-header {
-            margin-bottom: 4rem;
-        }
-
         .section-tag {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.2em;
             color: var(--text-secondary);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             display: block;
+            font-weight: 600;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-primary);
         }
 
         h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 500;
-            color: var(--text-primary);
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
         }
 
         a {
@@ -88,42 +85,118 @@
             transition: var(--transition);
         }
 
+        /* --- Spotlight Card Effect --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .spotlight-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition);
+            /* Logic for mouse glow is in JS */
+        }
+
+        .spotlight-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y), 
+                var(--accent-glow), 
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+        
+        .spotlight-card:hover {
+            border-color: #444;
+            transform: translateY(-2px);
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-icon {
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid #333;
+            border-radius: 50px;
+            color: #ccc;
+        }
+
         /* --- Buttons --- */
         .btn {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: transparent;
-            border: 1px solid var(--text-secondary);
-            color: var(--text-primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
             font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            transition: all 0.2s;
             cursor: pointer;
-            transition: all var(--transition);
-        }
-
-        .btn:hover {
-            background: var(--text-primary);
-            color: var(--bg-color);
-            border-color: var(--text-primary);
         }
 
         .btn-primary {
-            background: var(--text-primary);
-            color: var(--bg-color);
-            border: 1px solid var(--text-primary);
+            background: #fff;
+            color: #000;
+            border: 1px solid #fff;
         }
-
+        
         .btn-primary:hover {
-            background: transparent;
-            color: var(--text-primary);
+            background: #ddd;
         }
 
-        .btn-small {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #444;
+            color: #fff;
+        }
+
+        .btn-outline:hover {
+            border-color: #fff;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: #fff;
+            border: 1px solid #25D366;
+        }
+        
+        .btn-whatsapp:hover {
+            background: #1ebc57;
         }
 
         /* --- Navigation --- */
@@ -131,23 +204,23 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(8, 8, 8, 0.9);
-            backdrop-filter: blur(12px);
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
         }
 
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 80px;
+            height: 70px;
         }
 
         .logo {
-            font-family: 'Space Grotesk', sans-serif;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
             letter-spacing: -0.02em;
         }
 
@@ -157,157 +230,51 @@
         }
 
         .nav-links a {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 0.9rem;
             color: var(--text-secondary);
         }
 
         .nav-links a:hover {
-            color: var(--text-primary);
+            color: #fff;
         }
 
         /* --- Hero --- */
         .hero {
-            height: 90vh;
+            min-height: 90vh;
             display: flex;
             align-items: center;
-            padding-top: 80px;
+            padding-top: 70px;
         }
 
-        .hero-content h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(3rem, 6vw, 5rem);
-            line-height: 1.1;
+        .hero-title {
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            line-height: 1.05;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            background: linear-gradient(180deg, #fff, #888);
+            background: linear-gradient(to bottom right, #fff, #666);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero-content p {
-            font-size: 1.25rem;
+        .hero-sub {
+            font-size: 1.2rem;
             color: var(--text-secondary);
-            max-width: 600px;
+            max-width: 550px;
             margin-bottom: 2.5rem;
-        }
-
-        /* --- Grid Layouts --- */
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 2rem;
-        }
-
-        /* --- Cards --- */
-        .card {
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            padding: 2rem;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-
-        .card:hover {
-            border-color: var(--text-secondary);
-            transform: translateY(-5px);
-            background: var(--surface-hover);
-        }
-
-        .card-icon {
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-        }
-
-        .card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-            font-weight: 500;
-        }
-
-        .card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .tag {
-            font-size: 0.7rem;
-            padding: 0.2rem 0.6rem;
-            background: #222;
-            color: #aaa;
-            border-radius: 4px;
-        }
-
-        /* --- Link Cards (Stealthy Lists) --- */
-        .link-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .link-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            background: var(--surface-color);
-        }
-
-        .link-item:hover {
-            border-color: #555;
-            background: var(--surface-hover);
-        }
-
-        .link-info h4 {
-            font-size: 1.1rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .link-info span {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
         }
 
         /* --- Footer --- */
         footer {
             padding: 4rem 0;
-            background: #050505;
+            background: #020202;
             text-align: center;
         }
 
-        .footer-logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        /* --- Responsive --- */
+        /* --- Mobile Specific --- */
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero-content h1 { font-size: 2.5rem; }
-            .section { padding: 4rem 0; }
+            .nav-links { display: none; } /* Hidden on mobile for simplicity */
+            .btn { width: 100%; justify-content: center; }
+            .hero-btns { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
         }
     </style>
 </head>
@@ -318,140 +285,124 @@
             <a href="#" class="logo">H24 CREATIONZ</a>
             <div class="nav-links">
                 <a href="#services">Services</a>
-                <a href="#products">Products</a>
-                <a href="#design">Design</a>
+                <a href="#projects">Work</a>
                 <a href="#books">Books</a>
-                <a href="#contact">Contact</a>
+                <a href="#contact">Info</a>
             </div>
-            <a href="#contact" class="btn btn-small">Let's Talk</a>
+            <a href="https://wa.me/918667701001" target="_blank" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+                Let's Talk <i data-feather="message-circle" style="width: 14px; margin-left:5px;"></i>
+            </a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="container hero-content">
+        <div class="container">
             <span class="section-tag">Harsha Varthan E P</span>
-            <h1>Digital Artisan.<br>Tech Entrepreneur.</h1>
-            <p>I build modern web ecosystems, design compelling brands, and author books that inspire. A complete creative hub for clients and collaborators.</p>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <a href="#services" class="btn btn-primary">My Services</a>
-                <a href="#products" class="btn">View Products</a>
+            <h1 class="hero-title">Tech. Design.<br>Innovation.</h1>
+            <p class="hero-sub">
+                I help brands and businesses scale through modern websites, mobile apps, and strategic design. Your partner in digital transformation.
+            </p>
+            <div class="hero-btns" style="display: flex; gap: 1rem;">
+                <a href="#projects" class="btn btn-primary">View Portfolio</a>
+                <a href="#contact" class="btn btn-outline">Contact Details</a>
             </div>
         </div>
     </section>
 
     <section id="services" class="section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">What I Do</span>
-                <h2>Expertise & Capabilities</h2>
-            </div>
-            <div class="grid-3">
-                <div class="card">
-                    <div class="card-icon"><i data-feather="layout"></i></div>
-                    <h3>Web Development</h3>
-                    <p>Building high-performance, SEO-optimized websites. From single-page portfolios to complex educational and medical platforms.</p>
-                    <div class="tags">
-                        <span class="tag">HTML/CSS/JS</span>
-                        <span class="tag">React</span>
-                        <span class="tag">SEO</span>
+            <span class="section-tag">Capabilities</span>
+            <h2>What I Deliver</h2>
+            
+            <div class="card-grid">
+                <div class="spotlight-card">
+                    <div class="card-content">
+                        <i data-feather="monitor" class="card-icon"></i>
+                        <h3>Web Development</h3>
+                        <p style="color: #999; font-size: 0.9rem;">High-performance websites tailored for SEO and user conversion. Specializing in responsive, single-page, and corporate platforms.</p>
+                        <div class="tags">
+                            <span class="tag">HTML/CSS/JS</span>
+                            <span class="tag">SEO</span>
+                            <span class="tag">Deployment</span>
+                        </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-icon"><i data-feather="smartphone"></i></div>
-                    <h3>App Development</h3>
-                    <p>Creating utility and educational Android applications published under H24 Creationz with thousands of users.</p>
-                    <div class="tags">
-                        <span class="tag">Android</span>
-                        <span class="tag">Java/Kotlin</span>
-                        <span class="tag">UI/UX</span>
+
+                <div class="spotlight-card">
+                    <div class="card-content">
+                        <i data-feather="smartphone" class="card-icon"></i>
+                        <h3>App Development</h3>
+                        <p style="color: #999; font-size: 0.9rem;">Building robust Android applications. From concept to Play Store publication, handling UI/UX and functionality.</p>
+                        <div class="tags">
+                            <span class="tag">Native Android</span>
+                            <span class="tag">Play Console</span>
+                            <span class="tag">Mobile UX</span>
+                        </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-icon"><i data-feather="pen-tool"></i></div>
-                    <h3>Brand & Graphic Design</h3>
-                    <p>Crafting visual identities, social media kits, and promotional materials that stealthily capture market attention.</p>
-                    <div class="tags">
-                        <span class="tag">Branding</span>
-                        <span class="tag">Social Media</span>
-                        <span class="tag">Print</span>
+
+                <div class="spotlight-card">
+                    <div class="card-content">
+                        <i data-feather="pen-tool" class="card-icon"></i>
+                        <h3>Graphic Design</h3>
+                        <p style="color: #999; font-size: 0.9rem;">Stealthy, minimal, and modern branding. Social media kits, posters, and visual identities that stand out.</p>
+                        <div class="tags">
+                            <span class="tag">Branding</span>
+                            <span class="tag">Social Media</span>
+                            <span class="tag">Vector Art</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="products" class="section">
+    <section id="projects" class="section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Engineering</span>
-                <h2>Digital Products & Clients</h2>
-            </div>
-
-            <div style="margin-bottom: 3rem; padding: 2rem; border: 1px dashed var(--text-secondary); border-radius: 4px; background: rgba(255,255,255,0.02);">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <span class="section-tag">Selected Works</span>
+            <h2>Project Ecosystem</h2>
+            
+            <div class="spotlight-card" style="margin-bottom: 2rem; border-style: dashed;">
+                <div class="card-content" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                     <div>
-                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">H24 Software Lab</h3>
-                        <p style="color: var(--text-secondary); max-width: 500px;">Explore my latest web tools, experimental apps, and SaaS concepts including Dynamic QR Generators and File Transfer protocols.</p>
+                        <h3>H24 Software Lab</h3>
+                        <p style="color: #888;">Experimental tools: QR Generators, File Transfer, and more.</p>
                     </div>
-                    <a href="https://harshavarthanep.github.io/apps/" target="_blank" class="btn btn-primary">
-                        Launch Lab <i data-feather="external-link"></i>
-                    </a>
+                    <a href="https://harshavarthanep.github.io/apps/" target="_blank" class="btn btn-outline">Visit Lab <i data-feather="external-link"></i></a>
                 </div>
             </div>
 
-            <div class="grid-2">
-                <a href="https://play.google.com/store/apps/dev?id=8039460198278259208" target="_blank" class="link-item">
-                    <div class="link-info">
-                        <h4>Play Store Portfolio</h4>
-                        <span>10+ Apps (Confident Candidate, Aegan, etc.)</span>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="https://www.arjunahospital.in" target="_blank" class="spotlight-card" style="padding: 1.5rem; flex-direction: row; align-items: center;">
+                    <div class="card-content">
+                        <h4 style="font-size: 1.1rem; margin-bottom: 0.2rem;">Arjuna Hospital</h4>
+                        <span style="font-size: 0.8rem; color: #666;">SEO Strategy & Content Management</span>
                     </div>
-                    <i data-feather="arrow-right"></i>
-                </a>
-                
-                <a href="https://www.arjunahospital.in" target="_blank" class="link-item">
-                    <div class="link-info">
-                        <h4>Arjuna Hospital</h4>
-                        <span>SEO & Web Management</span>
-                    </div>
-                    <i data-feather="arrow-up-right"></i>
+                    <i data-feather="arrow-up-right" style="color: #666;"></i>
                 </a>
 
-                <a href="https://www.lkspolyclinic.com" target="_blank" class="link-item">
-                    <div class="link-info">
-                        <h4>LKS Polyclinic</h4>
-                        <span>Website Revamp & Social Strategy</span>
+                <a href="https://www.lkspolyclinic.com" target="_blank" class="spotlight-card" style="padding: 1.5rem; flex-direction: row; align-items: center;">
+                    <div class="card-content">
+                        <h4 style="font-size: 1.1rem; margin-bottom: 0.2rem;">LKS Polyclinic</h4>
+                        <span style="font-size: 0.8rem; color: #666;">Website Revamp & Social Marketing</span>
                     </div>
-                    <i data-feather="arrow-up-right"></i>
+                    <i data-feather="arrow-up-right" style="color: #666;"></i>
                 </a>
 
-                <a href="https://hometutorstraining.com/" target="_blank" class="link-item">
-                    <div class="link-info">
-                        <h4>Home Tutors Training</h4>
-                        <span>Educational Platform Development</span>
+                <a href="https://play.google.com/store/apps/dev?id=8039460198278259208" target="_blank" class="spotlight-card" style="padding: 1.5rem; flex-direction: row; align-items: center;">
+                    <div class="card-content">
+                        <h4 style="font-size: 1.1rem; margin-bottom: 0.2rem;">Google Play Portfolio</h4>
+                        <span style="font-size: 0.8rem; color: #666;">10+ Published Apps (Confident Candidate, Aegan)</span>
                     </div>
-                    <i data-feather="arrow-up-right"></i>
+                    <i data-feather="smartphone" style="color: #666;"></i>
                 </a>
-            </div>
-        </div>
-    </section>
 
-    <section id="design" class="section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Visuals</span>
-                <h2>The Creative Vault</h2>
-                <p style="color: var(--text-secondary); margin-top: 1rem; max-width: 600px;">
-                    A curated collection of my graphic design work, social media campaigns, and brand assets.
-                    <br><strong>Use this section to evaluate my design capabilities.</strong>
-                </p>
-            </div>
-
-            <div style="background: var(--surface-color); padding: 3rem; text-align: center; border: 1px solid var(--border-color);">
-                <i data-feather="folder" style="width: 48px; height: 48px; margin-bottom: 1rem; color: var(--text-secondary);"></i>
-                <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Project Archive Access</h3>
-                <p style="margin-bottom: 2rem; color: var(--text-secondary);">Access the comprehensive drive containing posters, logos, and UI designs.</p>
-                <a href="https://drive.google.com/drive/folders/1gS8AA5x-DoGLNGvXPDyXu_a4bJl2q08c?usp=sharing" target="_blank" class="btn btn-primary">
-                    Open Drive Folder <i data-feather="hard-drive"></i>
+                 <a href="https://drive.google.com/drive/folders/1gS8AA5x-DoGLNGvXPDyXu_a4bJl2q08c?usp=sharing" target="_blank" class="spotlight-card" style="padding: 1.5rem; flex-direction: row; align-items: center;">
+                    <div class="card-content">
+                        <h4 style="font-size: 1.1rem; margin-bottom: 0.2rem;">The Design Vault</h4>
+                        <span style="font-size: 0.8rem; color: #666;">Access Graphic Design Portfolio (Drive)</span>
+                    </div>
+                    <i data-feather="folder" style="color: #666;"></i>
                 </a>
             </div>
         </div>
@@ -459,68 +410,93 @@
 
     <section id="books" class="section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Literature</span>
-                <h2>Published Books</h2>
-            </div>
-            
-            <div class="grid-2">
-                <div class="card">
-                    <div style="margin-bottom: 1rem;">
-                        <span class="tag">Bestseller</span>
-                        <span class="tag">Self-Help</span>
-                    </div>
-                    <h3>Mind Feast</h3>
-                    <p>A guide to rejuvenating your mind, promoting self-esteem, and developing personality. Available in English and Tamil.</p>
-                    <div style="display: flex; gap: 1rem; margin-top: auto;">
-                        <a href="https://www.flipkart.com/search?q=Mind%20Feast%20Harsha%20Varthan" target="_blank" class="btn btn-small">Flipkart</a>
-                        <a href="https://www.amazon.in/s?k=Mind+Feast+Harsha+Varthan" target="_blank" class="btn btn-small">Amazon</a>
+            <span class="section-tag">Publications</span>
+            <h2>Authored Books</h2>
+            <div class="card-grid">
+                <div class="spotlight-card">
+                    <div class="card-content">
+                        <h3>Mind Feast</h3>
+                        <p style="color: #888; margin-bottom: 1rem;">Rejuvenate Your Mind. Available in English & Tamil.</p>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a href="https://www.flipkart.com/search?q=Mind%20Feast%20Harsha%20Varthan" target="_blank" class="tag">Flipkart</a>
+                            <a href="https://www.amazon.in/s?k=Mind+Feast+Harsha+Varthan" target="_blank" class="tag">Amazon</a>
+                        </div>
                     </div>
                 </div>
-
-                <div class="card">
-                    <div style="margin-bottom: 1rem;">
-                        <span class="tag">Philosophy</span>
-                        <span class="tag">Quotes</span>
-                    </div>
-                    <h3>Inspiring Illusions</h3>
-                    <p>Unique quotes for unique people. A collection of thoughts designed to inspire and provoke deep thinking.</p>
-                    <div style="display: flex; gap: 1rem; margin-top: auto;">
-                        <a href="https://www.amazon.in/s?k=Inspiring+Illusions+Harsha+Varthan" target="_blank" class="btn btn-small">Amazon</a>
-                        <a href="https://www.notionpress.com/read/inspiring-illusions" target="_blank" class="btn btn-small">Notion Press</a>
+                <div class="spotlight-card">
+                    <div class="card-content">
+                        <h3>Inspiring Illusions</h3>
+                        <p style="color: #888; margin-bottom: 1rem;">Unique Quotes for Unique People.</p>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a href="https://www.notionpress.com/read/inspiring-illusions" target="_blank" class="tag">Notion Press</a>
+                            <a href="https://www.amazon.in/s?k=Inspiring+Illusions+Harsha+Varthan" target="_blank" class="tag">Amazon</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="section" style="border-bottom: none;">
-        <div class="container" style="text-align: center;">
-            <span class="section-tag">Get In Touch</span>
-            <h2 style="font-size: 3rem; margin-bottom: 2rem;">Ready to Collaborate?</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-                Whether you need a developer for your startup, a designer for your brand, or a partner for your next venture, I am ready.
-            </p>
-            <a href="mailto:h24creationz@gmail.com" class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1rem;">Start a Project</a>
+    <section id="contact" class="section" style="border: none;">
+        <div class="container">
+            <div class="spotlight-card" style="text-align: center; padding: 4rem 2rem;">
+                <div class="card-content">
+                    <span class="section-tag">Get Connected</span>
+                    <h2 style="margin-bottom: 2rem;">Ready to Start?</h2>
+                    <p style="color: #999; max-width: 600px; margin: 0 auto 3rem auto;">
+                        Available for freelance projects and consulting. <br>
+                        Based in India, working globally.
+                    </p>
+                    
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                        <a href="https://wa.me/918667701001" target="_blank" class="btn btn-whatsapp">
+                            <i data-feather="message-circle"></i> Chat on WhatsApp
+                        </a>
+                        
+                        <a href="tel:+918667701001" style="color: #fff; margin-top: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i data-feather="phone"></i> +91 8667701001
+                        </a>
+                        
+                        <a href="mailto:h24creationz@gmail.com" style="color: #888; font-size: 0.9rem;">
+                            h24creationz@gmail.com
+                        </a>
+                    </div>
 
-            <div style="margin-top: 4rem; display: flex; justify-content: center; gap: 2rem;">
-                <a href="https://github.com/harshavarthanep" target="_blank" aria-label="Github"><i data-feather="github"></i></a>
-                <a href="https://www.linkedin.com/in/harsha-varthan-e-p-01878b1a3/" target="_blank" aria-label="LinkedIn"><i data-feather="linkedin"></i></a>
-                <a href="https://play.google.com/store/apps/dev?id=8039460198278259208" target="_blank" aria-label="Play Store"><i data-feather="smartphone"></i></a>
-                <a href="https://sites.google.com/view/h24creationz-business-card/home" target="_blank" aria-label="Old Site"><i data-feather="globe"></i></a>
+                    <div style="margin-top: 3rem; display: flex; justify-content: center; gap: 2rem;">
+                        <a href="https://github.com/harshavarthanep" target="_blank" style="color: #666; hover:color: #fff;"><i data-feather="github"></i></a>
+                        <a href="https://www.linkedin.com/in/harsha-varthan-e-p-01878b1a3/" target="_blank" style="color: #666; hover:color: #fff;"><i data-feather="linkedin"></i></a>
+                        <a href="https://play.google.com/store/apps/dev?id=8039460198278259208" target="_blank" style="color: #666; hover:color: #fff;"><i data-feather="smartphone"></i></a>
+                        <a href="https://sites.google.com/view/h24creationz-business-card/home" target="_blank" style="color: #666; hover:color: #fff;"><i data-feather="globe"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <span class="footer-logo">H24 CREATIONZ</span>
-            <p style="color: #444; font-size: 0.8rem;">&copy; 2026 Harsha Varthan E P. All Rights Reserved.</p>
+            <span class="logo">H24 CREATIONZ</span>
+            <p style="color: #444; font-size: 0.8rem; margin-top: 0.5rem;">&copy; 2026 Harsha Varthan E P.</p>
         </div>
     </footer>
 
     <script>
+        // Initialize Icons
         feather.replace();
+
+        // Spotlight Effect Logic
+        const cards = document.querySelectorAll('.spotlight-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
     </script>
 </body>
 </html>
