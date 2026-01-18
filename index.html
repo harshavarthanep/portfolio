@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Harsha Varthan E P | H24 Creationz</title>
     <meta name="description" content="Portfolio of Harsha Varthan E P - Tech Innovator, Developer, and Designer.">
     
@@ -40,7 +40,9 @@
 
         html {
             scroll-behavior: smooth;
-            scroll-padding-top: var(--nav-height); 
+            scroll-padding-top: var(--nav-height);
+            width: 100%;
+            overflow-x: hidden; /* Critical Fix for side-scroll */
         }
 
         body {
@@ -48,8 +50,10 @@
             background-color: var(--bg-color);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow-x: hidden;
+            width: 100%;
+            overflow-x: hidden; /* Critical Fix */
             -webkit-font-smoothing: antialiased;
+            position: relative;
         }
 
         /* --- Layout Utilities --- */
@@ -57,6 +61,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--spacing-container);
+            width: 100%;
         }
 
         .section {
@@ -66,6 +71,7 @@
             flex-direction: column;
             justify-content: center;
             border-bottom: 1px solid var(--border-color);
+            width: 100%;
         }
 
         .section-header {
@@ -101,6 +107,7 @@
         nav {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
             height: var(--nav-height);
             background: rgba(5, 5, 5, 0.95);
@@ -129,6 +136,7 @@
         .nav-links {
             display: flex;
             gap: 2rem;
+            list-style: none;
         }
 
         .nav-links a {
@@ -143,11 +151,11 @@
             color: #fff;
         }
 
-        /* Mobile Hamburger & Menu */
+        /* Mobile Hamburger */
         .hamburger {
             display: none;
             cursor: pointer;
-            z-index: 1002;
+            z-index: 1003;
         }
         
         .bar {
@@ -188,10 +196,17 @@
             border-top: 1px solid var(--border-color);
         }
 
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
         .stat-item h3 {
             font-size: 2.5rem;
             font-weight: 300;
             display: flex; 
+            align-items: center;
         }
         
         .counter { display: inline-block; }
@@ -201,6 +216,7 @@
             text-transform: uppercase;
             color: var(--text-secondary);
             letter-spacing: 0.05em;
+            margin-top: 0.5rem;
         }
 
         /* --- Spotlight Cards --- */
@@ -208,6 +224,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
+            width: 100%;
         }
 
         .spotlight-card {
@@ -223,7 +240,7 @@
             transition: var(--transition);
         }
 
-        /* Desktop Hover Glow (Disabled on touch to prevent sticky hover states) */
+        /* Desktop Hover Glow (Disabled on touch) */
         @media (hover: hover) {
             .spotlight-card::before {
                 content: "";
@@ -292,6 +309,7 @@
             cursor: pointer;
             transition: all 0.2s;
             white-space: nowrap;
+            text-decoration: none;
         }
 
         .btn-primary { background: #fff; color: #000; border: 1px solid #fff; }
@@ -299,9 +317,15 @@
         .btn-book { flex: 1; text-align: center; background: #1a1a1a; border: 1px solid #333; color: #fff; }
         .btn-whatsapp { background: #25D366; color: white; border: none; width: 100%; }
 
-        /* --- MOBILE OPTIMIZATION --- */
+        /* --- MOBILE OPTIMIZATION (Fixing padding & alignment) --- */
         @media (max-width: 900px) {
-            /* 1. Mobile Navigation */
+            /* 1. Global Padding Fix */
+            .container { 
+                padding: 0 1.5rem; /* Symmetric padding */
+                width: 100%;
+            }
+
+            /* 2. Menu Reset */
             .hamburger { display: block; }
 
             .nav-links {
@@ -309,7 +333,7 @@
                 left: -100%;
                 top: 0;
                 flex-direction: column;
-                background-color: #000;
+                background-color: #000; /* Full black background */
                 width: 100%;
                 height: 100vh;
                 text-align: center;
@@ -325,40 +349,72 @@
             
             .nav-links a { font-size: 1.5rem; }
 
+            /* Hamburger Animation */
             .hamburger.active .bar:nth-child(2) { opacity: 0; }
             .hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
             .hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-            /* 2. Hero & Typography */
-            .hero-title { font-size: 3rem; }
-            .hero { align-items: center; text-align: left; }
-            .hero p { font-size: 1rem; }
+            /* 3. Hero Alignment & Sizing */
+            .hero {
+                text-align: center; /* Center align to fix one-sided feel */
+                justify-content: center;
+                min-height: auto;
+                padding-bottom: 4rem;
+            }
 
-            /* 3. Section Sizing */
+            .hero-title { 
+                font-size: 2.8rem; /* Smaller font to fit screen */
+                line-height: 1.2;
+            }
+
+            .hero p { 
+                font-size: 1rem; 
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero div { 
+                /* The button container */
+                flex-direction: column; 
+                width: 100%; 
+            }
+
+            /* 4. Section Adjustments */
             .section { 
-                padding: 3rem 0; 
+                padding: 4rem 0; 
                 min-height: auto; 
+                align-items: center; /* Center align section content */
+            }
+
+            .section-header {
+                text-align: center;
+                width: 100%;
             }
             
             .card-grid {
-                grid-template-columns: 1fr; /* Force single column */
+                grid-template-columns: 1fr; /* Strict single column */
                 gap: 1.5rem;
             }
 
-            /* 4. Stats Grid */
+            /* 5. Stats Grid Balancing */
             .stats-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr 1fr; /* 2x2 grid */
                 gap: 2rem;
                 margin-top: 3rem;
+                width: 100%;
+                text-align: center;
             }
             
+            .stat-item {
+                align-items: center; /* Center flex items */
+            }
+
             .stat-item h3 { font-size: 2rem; }
 
-            /* 5. General Utility */
-            .container { padding: 0 1.5rem; }
+            /* 6. Button Full Widths */
             .btn { width: 100%; } 
-            .hero div { flex-direction: column; width: 100%; }
             
+            /* Hide desktop CTA in nav */
             nav .btn-primary { display: none; }
         }
     </style>
