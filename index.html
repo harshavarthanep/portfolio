@@ -35,6 +35,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* Remove blue highlight on mobile tap */
         }
 
         html {
@@ -59,7 +60,7 @@
         }
 
         .section {
-            min-height: 90vh; /* Ensures full screen feel */
+            min-height: 90vh; 
             padding: 5rem 0;
             display: flex;
             flex-direction: column;
@@ -121,8 +122,10 @@
             font-weight: 700;
             font-size: 1.25rem;
             letter-spacing: -0.02em;
+            z-index: 1002; /* Ensure logo stays above mobile menu */
         }
 
+        /* Desktop Menu */
         .nav-links {
             display: flex;
             gap: 2rem;
@@ -140,6 +143,23 @@
             color: #fff;
         }
 
+        /* Mobile Hamburger & Menu */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 1002;
+        }
+        
+        .bar {
+            display: block;
+            width: 25px;
+            height: 2px;
+            margin: 5px auto;
+            -webkit-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+            background-color: white;
+        }
+
         /* --- Hero --- */
         .hero {
             min-height: 100vh;
@@ -150,7 +170,7 @@
 
         .hero-title {
             font-size: clamp(3rem, 8vw, 6rem);
-            line-height: 1;
+            line-height: 1.1;
             font-weight: 700;
             margin-bottom: 1.5rem;
             background: linear-gradient(to right, #fff, #777);
@@ -171,12 +191,10 @@
         .stat-item h3 {
             font-size: 2.5rem;
             font-weight: 300;
-            display: flex; /* Aligns number and plus sign */
+            display: flex; 
         }
         
-        .counter {
-            display: inline-block;
-        }
+        .counter { display: inline-block; }
 
         .stat-item p {
             font-size: 0.8rem;
@@ -205,26 +223,27 @@
             transition: var(--transition);
         }
 
-        .spotlight-card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(
-                600px circle at var(--mouse-x) var(--mouse-y), 
-                var(--accent-glow), 
-                transparent 40%
-            );
-            opacity: 0;
-            transition: opacity 0.5s;
-            pointer-events: none;
-            z-index: 1;
+        /* Desktop Hover Glow */
+        @media (hover: hover) {
+            .spotlight-card::before {
+                content: "";
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: radial-gradient(
+                    600px circle at var(--mouse-x) var(--mouse-y), 
+                    var(--accent-glow), 
+                    transparent 40%
+                );
+                opacity: 0;
+                transition: opacity 0.5s;
+                pointer-events: none;
+                z-index: 1;
+            }
+            .spotlight-card:hover::before { opacity: 1; }
+            .spotlight-card:hover { border-color: #333; transform: translateY(-3px); }
         }
 
-        .spotlight-card:hover::before { opacity: 1; }
-        .spotlight-card:hover { border-color: #333; transform: translateY(-3px); }
-
         .card-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; }
-        
         .card-icon { color: #fff; margin-bottom: 1.5rem; }
         
         .project-link {
@@ -237,8 +256,6 @@
             font-weight: 600;
             color: #fff;
         }
-        
-        .project-link:hover { text-decoration: underline; }
 
         /* --- Lab Highlight --- */
         .lab-card {
@@ -259,34 +276,79 @@
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
-            width: fit-content;
+            white-space: nowrap;
         }
 
         .btn-primary { background: #fff; color: #000; border: 1px solid #fff; }
-        .btn-primary:hover { background: #ccc; border-color: #ccc; }
-
         .btn-outline { background: transparent; border: 1px solid #444; color: #fff; }
-        .btn-outline:hover { border-color: #fff; }
+        .btn-book { flex: 1; text-align: center; background: #1a1a1a; border: 1px solid #333; color: #fff; }
+        .btn-whatsapp { background: #25D366; color: white; border: none; width: 100%; }
 
-        .btn-book { 
-            flex: 1; 
-            text-align: center; 
-            background: #1a1a1a; 
-            border: 1px solid #333;
-            color: #fff;
-        }
-        .btn-book:hover { background: #fff; color: #000; }
-
-        .btn-whatsapp { background: #25D366; color: white; border: none; }
-        .btn-whatsapp:hover { background: #20b857; }
-
-        /* --- Mobile Optimization --- */
+        /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 900px) {
-            .nav-links { display: none; } /* Simplified menu for mobile */
-            .hero-title { font-size: 3.5rem; }
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
-            .section { padding: 4rem 0; min-height: auto; /* Remove fixed height for safety on mobile */ } 
-            .btn { width: 100%; }
+            /* 1. Mobile Navigation */
+            .hamburger { display: block; }
+
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                flex-direction: column;
+                background-color: #000;
+                width: 100%;
+                height: 100vh;
+                text-align: center;
+                transition: 0.3s;
+                padding-top: 8rem; /* Space from top */
+                gap: 2.5rem;
+                z-index: 1001;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links a { font-size: 1.5rem; }
+
+            /* Hamburger Animation */
+            .hamburger.active .bar:nth-child(2) { opacity: 0; }
+            .hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+            .hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+            /* 2. Hero & Typography */
+            .hero-title { font-size: 3rem; }
+            .hero { align-items: center; text-align: left; }
+            .hero p { font-size: 1rem; }
+
+            /* 3. Section Sizing */
+            .section { 
+                padding: 3rem 0; /* Reduced padding */
+                min-height: auto; /* Remove rigid height constraints */
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr; /* Force single column */
+                gap: 1.5rem;
+            }
+
+            /* 4. Stats Grid */
+            .stats-grid {
+                grid-template-columns: 1fr 1fr; /* 2x2 grid */
+                gap: 2rem;
+                margin-top: 3rem;
+            }
+            
+            .stat-item h3 { font-size: 2rem; }
+
+            /* 5. General Utility */
+            .container { padding: 0 1.5rem; }
+            .btn { width: 100%; } /* Full width buttons */
+            .hero div { flex-direction: column; width: 100%; } /* Stack hero buttons */
+            
+            /* Hide the desktop 'Let's Talk' button in nav, show inside menu */
+            nav .btn-primary { display: none; }
+            
+            /* Re-add Let's Talk inside the mobile menu via JS or just rely on bottom contact */
         }
     </style>
 </head>
@@ -295,14 +357,22 @@
     <nav>
         <div class="container nav-container">
             <a href="#" class="logo">H24 CREATIONZ</a>
-            <div class="nav-links">
-                <a href="#lab">The Lab</a>
-                <a href="#clients">Work</a>
-                <a href="#design">Design</a>
-                <a href="#mobile">Apps</a>
-                <a href="#books">Books</a>
-                <a href="#contact">Contact</a>
+            
+            <ul class="nav-links">
+                <li><a href="#lab" onclick="closeMenu()">The Lab</a></li>
+                <li><a href="#clients" onclick="closeMenu()">Work</a></li>
+                <li><a href="#design" onclick="closeMenu()">Design</a></li>
+                <li><a href="#mobile" onclick="closeMenu()">Apps</a></li>
+                <li><a href="#books" onclick="closeMenu()">Books</a></li>
+                <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+            </ul>
+
+            <div class="hamburger" onclick="mobileMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
             </div>
+
             <a href="https://wa.me/918667701001" target="_blank" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
                 Let's Talk <i data-feather="message-circle" style="width: 14px;"></i>
             </a>
@@ -374,7 +444,7 @@
                     <div class="card-content">
                         <i data-feather="activity" class="card-icon"></i>
                         <h3>DAP Fitness Studio</h3>
-                        <p style="color: #999;">Designed and developed a modern fitness website with SEO optimization to boost local visibility and membership signups.</p>
+                        <p style="color: #999;">Designed and developed a modern fitness website with SEO optimization to boost local visibility.</p>
                         <a href="https://dap-fitness-studio-web.vercel.app/" target="_blank" class="project-link">
                             Visit Website <i data-feather="arrow-right" style="width: 16px;"></i>
                         </a>
@@ -385,7 +455,7 @@
                     <div class="card-content">
                         <i data-feather="plus-square" class="card-icon"></i>
                         <h3>Arjuna Hospital</h3>
-                        <p style="color: #999;">Executed a comprehensive SEO strategy and content management system to rank the hospital for key medical keywords.</p>
+                        <p style="color: #999;">Executed a comprehensive SEO strategy and content management system for ranking.</p>
                         <a href="https://www.arjunahospital.in" target="_blank" class="project-link">
                             Visit Website <i data-feather="arrow-right" style="width: 16px;"></i>
                         </a>
@@ -396,7 +466,7 @@
                     <div class="card-content">
                         <i data-feather="heart" class="card-icon"></i>
                         <h3>LKS Polyclinic</h3>
-                        <p style="color: #999;">Complete website revamp and social media integration for specialized departments like Oncology and Pulmonology.</p>
+                        <p style="color: #999;">Complete website revamp and social media integration for specialized departments.</p>
                         <a href="https://www.lkspolyclinic.com" target="_blank" class="project-link">
                             Visit Website <i data-feather="arrow-right" style="width: 16px;"></i>
                         </a>
@@ -419,8 +489,7 @@
                         <i data-feather="folder" class="card-icon"></i>
                         <h3>Graphic Design Archive</h3>
                         <p style="color: #999;">
-                            A secured drive containing my portfolio of posters, logos, social media kits, and brand identity work. 
-                            <strong>Access required for client review.</strong>
+                            A secured drive containing my portfolio of posters, logos, social media kits, and brand identity work.
                         </p>
                     </div>
                     <a href="https://drive.google.com/drive/folders/1gS8AA5x-DoGLNGvXPDyXu_a4bJl2q08c?usp=sharing" target="_blank" class="btn btn-outline" style="border-style: dashed;">
@@ -441,9 +510,9 @@
             <div class="spotlight-card" style="padding: 3rem;">
                 <div class="card-content" style="text-align: center; align-items: center;">
                     <i data-feather="smartphone" style="width: 48px; height: 48px; margin-bottom: 1rem; color: #fff;"></i>
-                    <h3 style="font-size: 2rem; margin-bottom: 1rem;">The Play Store Collection</h3>
+                    <h3 style="font-size: 2rem; margin-bottom: 1rem;">Play Store Collection</h3>
                     <p style="max-width: 600px; color: #999; margin-bottom: 2rem;">
-                        Over 10 published applications including <strong>Confident Candidate</strong> (Education) and <strong>Aegan</strong> (Gaming). Focused on utility, productivity, and user experience.
+                        Over 10 published applications including <strong>Confident Candidate</strong> and <strong>Aegan</strong>.
                     </p>
                     <a href="https://play.google.com/store/apps/dev?id=8039460198278259208" target="_blank" class="btn btn-primary">
                         View Play Store Profile <i data-feather="external-link"></i>
@@ -464,7 +533,7 @@
                 <div class="spotlight-card">
                     <div class="card-content">
                         <h3>Mind Feast</h3>
-                        <p style="color: #999; margin-bottom: 2rem;">Rejuvenate your mind. A guide to self-esteem and personality development. (English & Tamil)</p>
+                        <p style="color: #999; margin-bottom: 2rem;">Rejuvenate your mind. A guide to self-esteem and personality.</p>
                         <div style="display: flex; gap: 1rem; margin-top: auto;">
                             <a href="https://www.flipkart.com/search?q=Mind%20Feast%20Harsha%20Varthan" target="_blank" class="btn btn-book">Flipkart</a>
                             <a href="https://www.amazon.in/s?k=Mind+Feast+Harsha+Varthan" target="_blank" class="btn btn-book">Amazon</a>
@@ -475,7 +544,7 @@
                 <div class="spotlight-card">
                     <div class="card-content">
                         <h3>Inspiring Illusions</h3>
-                        <p style="color: #999; margin-bottom: 2rem;">Unique quotes for unique people. A collection designed to provoke deep thought.</p>
+                        <p style="color: #999; margin-bottom: 2rem;">Unique quotes for unique people.</p>
                         <div style="display: flex; gap: 1rem; margin-top: auto;">
                             <a href="https://www.amazon.in/s?k=Inspiring+Illusions+Harsha+Varthan" target="_blank" class="btn btn-book">Amazon</a>
                             <a href="https://www.notionpress.com/read/inspiring-illusions" target="_blank" class="btn btn-book">Notion Press</a>
@@ -497,7 +566,7 @@
                     </p>
 
                     <div style="display: flex; flex-direction: column; gap: 1.5rem; width: 100%; max-width: 400px;">
-                        <a href="https://wa.me/918667701001" target="_blank" class="btn btn-whatsapp" style="width: 100%;">
+                        <a href="https://wa.me/918667701001" target="_blank" class="btn btn-whatsapp">
                             <i data-feather="message-circle"></i> Chat on WhatsApp
                         </a>
 
@@ -529,7 +598,7 @@
         // 1. Initialize Feather Icons
         feather.replace();
 
-        // 2. Spotlight Mouse Effect
+        // 2. Spotlight Mouse Effect (Only works on Desktop via hover media query in CSS)
         const cards = document.querySelectorAll('.spotlight-card');
         cards.forEach(card => {
             card.addEventListener('mousemove', e => {
@@ -541,22 +610,34 @@
             });
         });
 
-        // 3. Number Counter Animation using Intersection Observer
+        // 3. Mobile Menu Logic
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector(".nav-links");
+
+        function mobileMenu() {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
+        }
+        
+        function closeMenu() {
+            hamburger.classList.remove("active");
+            navMenu.classList.remove("active");
+        }
+
+        // 4. Number Counter Animation
         const counters = document.querySelectorAll('.counter');
-        const speed = 200; // The lower the slower
+        const speed = 200; 
 
         const animateCounters = () => {
             counters.forEach(counter => {
                 const updateCount = () => {
                     const target = +counter.getAttribute('data-target');
                     const count = +counter.innerText;
-                    
-                    // Lower increment makes it animate smoother
                     const inc = target / speed;
 
                     if (count < target) {
                         counter.innerText = Math.ceil(count + inc);
-                        setTimeout(updateCount, 25); // Speed of animation
+                        setTimeout(updateCount, 25);
                     } else {
                         counter.innerText = target;
                     }
@@ -565,14 +646,13 @@
             });
         };
 
-        // Trigger animation only when section is visible
         const statsSection = document.querySelector('#stats-section');
         const observer = new IntersectionObserver((entries) => {
             if(entries[0].isIntersecting) {
                 animateCounters();
-                observer.unobserve(statsSection); // Only animate once
+                observer.unobserve(statsSection);
             }
-        }, { threshold: 0.5 }); // Trigger when 50% visible
+        }, { threshold: 0.2 }); // Trigger earlier on mobile
 
         if(statsSection) {
             observer.observe(statsSection);
