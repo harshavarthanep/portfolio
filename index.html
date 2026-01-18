@@ -35,7 +35,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* Remove blue highlight on mobile tap */
+            -webkit-tap-highlight-color: transparent;
         }
 
         html {
@@ -122,7 +122,7 @@
             font-weight: 700;
             font-size: 1.25rem;
             letter-spacing: -0.02em;
-            z-index: 1002; /* Ensure logo stays above mobile menu */
+            z-index: 1002;
         }
 
         /* Desktop Menu */
@@ -223,7 +223,7 @@
             transition: var(--transition);
         }
 
-        /* Desktop Hover Glow */
+        /* Desktop Hover Glow (Disabled on touch to prevent sticky hover states) */
         @media (hover: hover) {
             .spotlight-card::before {
                 content: "";
@@ -255,6 +255,21 @@
             font-size: 0.9rem;
             font-weight: 600;
             color: #fff;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid #333;
+            border-radius: 50px;
+            color: #ccc;
         }
 
         /* --- Lab Highlight --- */
@@ -299,8 +314,8 @@
                 height: 100vh;
                 text-align: center;
                 transition: 0.3s;
-                padding-top: 8rem; /* Space from top */
-                gap: 2.5rem;
+                padding-top: 8rem;
+                gap: 2rem;
                 z-index: 1001;
             }
 
@@ -310,7 +325,6 @@
             
             .nav-links a { font-size: 1.5rem; }
 
-            /* Hamburger Animation */
             .hamburger.active .bar:nth-child(2) { opacity: 0; }
             .hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
             .hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -322,8 +336,8 @@
 
             /* 3. Section Sizing */
             .section { 
-                padding: 3rem 0; /* Reduced padding */
-                min-height: auto; /* Remove rigid height constraints */
+                padding: 3rem 0; 
+                min-height: auto; 
             }
             
             .card-grid {
@@ -333,7 +347,7 @@
 
             /* 4. Stats Grid */
             .stats-grid {
-                grid-template-columns: 1fr 1fr; /* 2x2 grid */
+                grid-template-columns: 1fr 1fr;
                 gap: 2rem;
                 margin-top: 3rem;
             }
@@ -342,13 +356,10 @@
 
             /* 5. General Utility */
             .container { padding: 0 1.5rem; }
-            .btn { width: 100%; } /* Full width buttons */
-            .hero div { flex-direction: column; width: 100%; } /* Stack hero buttons */
+            .btn { width: 100%; } 
+            .hero div { flex-direction: column; width: 100%; }
             
-            /* Hide the desktop 'Let's Talk' button in nav, show inside menu */
             nav .btn-primary { display: none; }
-            
-            /* Re-add Let's Talk inside the mobile menu via JS or just rely on bottom contact */
         }
     </style>
 </head>
@@ -359,6 +370,7 @@
             <a href="#" class="logo">H24 CREATIONZ</a>
             
             <ul class="nav-links">
+                <li><a href="#services" onclick="closeMenu()">Services</a></li>
                 <li><a href="#lab" onclick="closeMenu()">The Lab</a></li>
                 <li><a href="#clients" onclick="closeMenu()">Work</a></li>
                 <li><a href="#design" onclick="closeMenu()">Design</a></li>
@@ -408,6 +420,56 @@
                 <div class="stat-item">
                     <h3><span class="counter" data-target="2">0</span></h3>
                     <p>Books Authored</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Capabilities</span>
+                <h2>What I Deliver</h2>
+            </div>
+            
+            <div class="card-grid">
+                <div class="spotlight-card">
+                    <div class="card-content">
+                        <i data-feather="monitor" class="card-icon"></i>
+                        <h3>Web Development</h3>
+                        <p style="color: #999; font-size: 0.9rem;">High-performance websites tailored for SEO and user conversion. Specializing in responsive, single-page, and corporate platforms.</p>
+                        <div class="tags">
+                            <span class="tag">HTML/CSS/JS</span>
+                            <span class="tag">SEO</span>
+                            <span class="tag">Deploy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spotlight-card">
+                    <div class="card-content">
+                        <i data-feather="smartphone" class="card-icon"></i>
+                        <h3>App Development</h3>
+                        <p style="color: #999; font-size: 0.9rem;">Building robust Android applications. From concept to Play Store publication, handling UI/UX and functionality.</p>
+                        <div class="tags">
+                            <span class="tag">Android</span>
+                            <span class="tag">Mobile UX</span>
+                            <span class="tag">Play Console</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spotlight-card">
+                    <div class="card-content">
+                        <i data-feather="pen-tool" class="card-icon"></i>
+                        <h3>Graphic Design</h3>
+                        <p style="color: #999; font-size: 0.9rem;">Stealthy, minimal, and modern branding. Social media kits, posters, and visual identities that stand out.</p>
+                        <div class="tags">
+                            <span class="tag">Branding</span>
+                            <span class="tag">Social Media</span>
+                            <span class="tag">Identity</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -652,7 +714,7 @@
                 animateCounters();
                 observer.unobserve(statsSection);
             }
-        }, { threshold: 0.2 }); // Trigger earlier on mobile
+        }, { threshold: 0.2 }); 
 
         if(statsSection) {
             observer.observe(statsSection);
