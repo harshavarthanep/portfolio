@@ -7,7 +7,7 @@
     <meta name="description" content="H24_NEXUS // Harsha Varthan E P Portfolio System">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <script src="https://unpkg.com/feather-icons"></script>
 
@@ -26,14 +26,19 @@
             --font-main: 'Share Tech Mono', monospace;
             --font-code: 'Fira Code', monospace;
             
-            /* SPACING */
+            /* DIMENSIONS */
             --header-height: 70px;
             --section-gap: 6rem;
         }
 
-        /* RESET */
+        /* RESET & BASE */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html { scroll-behavior: smooth; }
+        
+        html { 
+            scroll-behavior: smooth; 
+            /* CRITICAL FIX: Ensures anchors land below the sticky header */
+            scroll-padding-top: calc(var(--header-height) + 20px);
+        }
         
         body {
             background-color: var(--bg-color);
@@ -42,56 +47,41 @@
             line-height: 1.6;
             overflow-x: hidden;
             font-size: 16px;
+            /* Grid Background */
             background-image: 
                 linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03));
             background-size: 100% 4px, 50px 100%;
-            opacity: 0; /* For boot animation */
-            animation: bootUp 1s forwards;
+            opacity: 0; animation: bootUp 0.8s forwards;
         }
 
         @keyframes bootUp { to { opacity: 1; } }
 
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-            position: relative;
-            z-index: 10;
+            max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 10;
         }
 
         /* --- UI OVERLAYS --- */
         .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: repeating-linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.15;
+            background-size: 100% 4px; pointer-events: none; z-index: 9999; opacity: 0.15;
         }
 
         /* --- HEADER --- */
         header {
             height: var(--header-height);
             border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            background: rgba(5, 5, 5, 0.95);
-            backdrop-filter: blur(12px);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
+            position: sticky; top: 0;
+            background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(12px);
+            z-index: 1000; display: flex; align-items: center;
         }
 
         .hud-nav { width: 100%; display: flex; justify-content: space-between; align-items: center; }
 
         .brand {
-            font-family: var(--font-code);
-            font-weight: 700;
-            font-size: 1.3rem;
-            letter-spacing: -1px;
+            font-family: var(--font-code); font-weight: 700; font-size: 1.3rem; letter-spacing: -1px;
             display: flex; align-items: center; gap: 10px;
         }
         .brand span { color: var(--accent-color); text-shadow: 0 0 10px var(--accent-dim); }
@@ -100,11 +90,10 @@
             padding: 1px 5px; opacity: 0.8; animation: pulse 3s infinite; display: inline-block;
         }
 
-        /* Desktop Menu */
+        /* Nav Links */
         .nav-links { display: flex; gap: 2rem; }
         .nav-item {
-            font-family: var(--font-code); font-size: 0.85rem; color: var(--text-dim);
-            position: relative; cursor: pointer;
+            font-family: var(--font-code); font-size: 0.85rem; color: var(--text-dim); position: relative; cursor: pointer;
         }
         .nav-item:hover { color: var(--accent-color); }
         .nav-item::after {
@@ -118,14 +107,14 @@
         .mobile-menu {
             position: fixed; top: var(--header-height); left: 0; width: 100%; height: 0;
             background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border-color);
-            overflow: hidden; transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-bottom: 1px solid var(--border-color); overflow: hidden;
+            transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
         }
         .mobile-menu.active { height: calc(100vh - var(--header-height)); }
         .mobile-menu .nav-item { font-size: 1.2rem; color: #fff; }
 
-        /* --- HERO --- */
+        /* --- HERO SECTION --- */
         .terminal-section {
             min-height: 85vh; display: flex; align-items: center; justify-content: center; padding: 2rem 0;
         }
@@ -133,11 +122,10 @@
             width: 100%; border: 1px solid var(--border-color); background: var(--panel-color);
             padding: 3rem; position: relative; box-shadow: 0 0 40px rgba(0,0,0,0.6);
         }
-        /* Glow Effect */
         .terminal-window::before {
             content: ""; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
             background: linear-gradient(45deg, var(--accent-color), transparent, var(--accent-color));
-            z-index: -1; opacity: 0.1; border-radius: 4px;
+            z-index: -1; opacity: 0.1;
         }
 
         .top-bar {
@@ -150,11 +138,12 @@
         .typing-container h1 {
             font-size: clamp(1.8rem, 5vw, 4rem); line-height: 1.2; margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 400;
         }
-        
-        /* Layout Shift Fix: Fixed height container for the dynamic text */
-        .dynamic-wrapper {
+
+        /* --- LAYOUT SHIFT FIX: Reserved Height for Typing Text --- */
+        .role-wrapper-container {
             display: block;
-            min-height: 1.2em; /* Reserves space for one line */
+            /* Reserves enough height for 2 lines on mobile if needed, or 1 line desktop */
+            min-height: 2.4em; 
             color: var(--accent-color);
         }
         
@@ -176,7 +165,7 @@
             font-family: var(--font-code); font-size: 0.8rem; text-transform: uppercase;
             letter-spacing: 1px; transition: 0.2s; cursor: pointer; text-align: center; gap: 8px;
         }
-        .sys-btn:active { transform: scale(0.95); }
+        .sys-btn:active { transform: scale(0.98); }
         .sys-btn:hover {
             background: var(--accent-color); color: #000; border-color: var(--accent-color);
             box-shadow: 0 0 15px var(--accent-dim);
@@ -184,6 +173,7 @@
         .sys-btn.primary { border-color: var(--accent-color); color: var(--accent-color); }
         .sys-btn.primary:hover { color: #000; }
 
+        /* Stats */
         .terminal-stats {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
             margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed var(--border-color);
@@ -192,11 +182,7 @@
         .stat-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
 
         /* --- SECTIONS --- */
-        section { 
-            margin-bottom: var(--section-gap); 
-            /* Fix for anchor landing position */
-            scroll-margin-top: 100px; 
-        }
+        section, .lab-unit { margin-bottom: var(--section-gap); }
         
         .section-title {
             font-family: var(--font-code); font-size: 1.4rem; margin-bottom: 2.5rem;
@@ -204,6 +190,7 @@
             background: linear-gradient(90deg, rgba(0,255,204,0.05), transparent);
             padding-top: 0.5rem; padding-bottom: 0.5rem;
             display: flex; align-items: center; gap: 10px;
+            white-space: nowrap; overflow: hidden;
         }
 
         .grid-system { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
@@ -211,14 +198,18 @@
         /* --- CARDS --- */
         .data-card {
             background: var(--panel-color); border: 1px solid var(--border-color); padding: 2rem;
-            position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; transition: all 0.3s ease;
             display: flex; flex-direction: column; justify-content: space-between; height: 100%;
         }
+        
+        /* HOVER: Full Glow + Triangle */
         .data-card:hover {
-            transform: translateY(-5px); border-color: var(--border-color);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(-5px); 
+            border-color: var(--accent-color); /* Full outline glow */
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.15); /* Soft outer glow */
         }
-        /* EDGE EFFECT (Triangle) */
+        
+        /* Triangle Corner */
         .data-card::after {
             content: ""; position: absolute; top: 0; right: 0; width: 0; height: 0;
             border-style: solid; border-width: 0 30px 30px 0;
@@ -228,8 +219,8 @@
         .data-card:hover::after { border-color: transparent var(--accent-color) transparent transparent; }
 
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .icon-box { color: var(--accent-color); transition: transform 0.3s; }
-        .data-card:hover .icon-box { transform: scale(1.1) rotate(5deg); }
+        .icon-box { color: var(--accent-color); transition: transform 0.5s; }
+        .data-card:hover .icon-box { transform: scale(1.1); }
         
         .card-title { font-family: var(--font-code); font-size: 1.1rem; font-weight: 600; color: #fff; }
         .card-desc { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1.5rem; flex-grow: 1; }
@@ -245,15 +236,23 @@
             border: 1px dashed var(--accent-color);
             background: radial-gradient(circle at center, rgba(0, 255, 204, 0.03) 0%, transparent 70%);
             padding: 2.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem;
-            margin-bottom: var(--section-gap); position: relative; overflow: hidden;
+            position: relative; overflow: hidden;
         }
-        .lab-unit:hover { border-style: solid; box-shadow: 0 0 20px rgba(0,255,204,0.05); }
+        .lab-unit:hover { border-style: solid; box-shadow: 0 0 20px rgba(0,255,204,0.1); }
+
+        /* --- ANIMATED ICONS --- */
+        .anim-beat { animation: heartbeat 1.5s infinite; }
+        .anim-spin:hover { animation: spin 2s linear infinite; }
+        .anim-float:hover { animation: float 2s ease-in-out infinite; }
+
+        @keyframes heartbeat { 0% { transform: scale(1); } 15% { transform: scale(1.2); } 30% { transform: scale(1); } 45% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
 
         /* --- FOOTER --- */
         .comm-link {
             border-top: 1px solid var(--border-color); padding: 5rem 0 2rem 0;
-            text-align: center; background: linear-gradient(to top, #000, transparent);
-            margin-bottom: 0; /* Remove extra space */
+            text-align: center; background: linear-gradient(to top, #000, transparent); margin-bottom: 0;
         }
         .cmd-input {
             background: #000; border: 1px solid #333; color: var(--accent-color);
@@ -261,8 +260,9 @@
         }
         
         .h24-brand {
-            font-family: var(--font-code); font-size: 1.5rem; color: #fff; letter-spacing: 2px;
-            margin-top: 4rem; margin-bottom: 0.5rem; text-transform: uppercase;
+            font-family: 'Fira Code', monospace; /* Programmatic Font */
+            font-weight: 700; font-size: 1.6rem; color: #fff; letter-spacing: -0.5px;
+            margin-top: 4rem; margin-bottom: 0.5rem;
         }
         .copyright { font-size: 0.8rem; color: #555; font-family: var(--font-code); }
 
@@ -278,9 +278,11 @@
             .terminal-section { min-height: auto; padding-top: 3rem; }
             .lab-unit { flex-direction: column; text-align: center; }
             .sys-btn { width: 100%; }
+            /* Mobile Typography Adjustments */
+            .typing-container h1 { font-size: 1.8rem; }
         }
 
-        /* UTILS */
+        /* --- UTILS --- */
         @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         .fade-in { opacity: 0; transform: translateY(20px); transition: 0.6s ease-out; }
@@ -298,9 +300,10 @@
             
             <nav class="nav-links">
                 <a href="#skills" class="nav-item">CAPABILITIES</a>
+                <a href="#lab" class="nav-item">LAB</a>
                 <a href="#work" class="nav-item">DEPLOYMENTS</a>
                 <a href="#internal" class="nav-item">ASSETS</a>
-                <a href="#lab" class="nav-item">LAB</a>
+                <a href="#books" class="nav-item">KNOWLEDGE</a>
                 <a href="#contact" class="nav-item">UPLINK</a>
             </nav>
 
@@ -311,9 +314,10 @@
 
         <div class="mobile-menu" id="mobileMenu">
             <a href="#skills" class="nav-item" onclick="toggleMenu()">CAPABILITIES</a>
+            <a href="#lab" class="nav-item" onclick="toggleMenu()">LAB_TERMINAL</a>
             <a href="#work" class="nav-item" onclick="toggleMenu()">DEPLOYMENTS</a>
             <a href="#internal" class="nav-item" onclick="toggleMenu()">INTERNAL_ASSETS</a>
-            <a href="#lab" class="nav-item" onclick="toggleMenu()">LAB_TERMINAL</a>
+            <a href="#books" class="nav-item" onclick="toggleMenu()">KNOWLEDGE_BASE</a>
             <a href="#contact" class="nav-item" onclick="toggleMenu()">ESTABLISH_UPLINK</a>
         </div>
     </header>
@@ -327,7 +331,7 @@
                     <p style="color: var(--text-dim); font-family: var(--font-code); margin-top: 1rem;">> INITIALIZING USER IDENTITY...</p>
                     <h1>
                         HARSHA VARTHAN E P<br>
-                        <span class="dynamic-wrapper">
+                        <span class="role-wrapper-container">
                             ROLE: <span class="role-text"></span><span class="cursor"></span>
                         </span>
                     </h1>
@@ -339,7 +343,7 @@
 
                     <div class="btn-group">
                          <a href="#work" class="sys-btn primary">[ VIEW_PORTFOLIO ]</a>
-                         <a href="https://wa.me/918667701001" target="_blank" class="sys-btn">[ DIRECT_MESSAGE ]</a>
+                         <a href="https://wa.me/918667701001" target="_blank" class="sys-btn">[ CHAT_ON_WHATSAPP ]</a>
                     </div>
                 </div>
 
@@ -365,12 +369,12 @@
         </section>
 
         <section id="skills" class="fade-in">
-            <h2 class="section-title">> SYSTEM_CAPABILITIES</h2>
+            <h2 class="section-title" data-text="> SYSTEM_CAPABILITIES">> SYSTEM_CAPABILITIES</h2>
             <div class="grid-system">
                 <div class="data-card">
                     <div class="card-header">
                         <span class="card-title">FULL_STACK_DEV</span>
-                        <i data-feather="server" class="icon-box"></i>
+                        <i data-feather="server" class="icon-box anim-float"></i>
                     </div>
                     <p class="card-desc">Robust web architecture. React.js ecosystems. High-performance SEO & server-side logic.</p>
                     <div class="tag-row"><span class="sys-tag">REACT</span><span class="sys-tag">NODE</span><span class="sys-tag">WEB3</span></div>
@@ -405,7 +409,7 @@
         <div class="lab-unit fade-in" id="lab">
             <div>
                 <h3 style="font-family: var(--font-code); font-size: 1.4rem; margin-bottom: 0.5rem; color: #fff;">
-                    <i data-feather="cpu" style="width: 20px; vertical-align: middle; color: var(--accent-color);"></i> 
+                    <i data-feather="cpu" class="anim-spin" style="width: 22px; vertical-align: bottom; color: var(--accent-color); margin-right: 8px;"></i> 
                     H24_SOFTWARE_LAB
                 </h3>
                 <p style="color: var(--text-dim);">Internal tools. QR Generators, File Transfers, and Web Utils.</p>
@@ -416,12 +420,12 @@
         </div>
 
         <section id="work" class="fade-in">
-            <h2 class="section-title">> CLIENT_DEPLOYMENTS</h2>
+            <h2 class="section-title" data-text="> CLIENT_DEPLOYMENTS">> CLIENT_DEPLOYMENTS</h2>
             <div class="grid-system">
                 <div class="data-card">
                     <div class="card-header">
                         <span class="card-title">DAP_FITNESS</span>
-                        <i data-feather="activity" class="icon-box"></i>
+                        <i data-feather="activity" class="icon-box anim-beat"></i>
                     </div>
                     <p class="card-desc">Modern fitness platform. Optimized for local SEO visibility.</p>
                     <div class="btn-group">
@@ -441,7 +445,7 @@
                 <div class="data-card">
                     <div class="card-header">
                         <span class="card-title">LKS_POLYCLINIC</span>
-                        <i data-feather="heart" class="icon-box"></i>
+                        <i data-feather="heart" class="icon-box anim-beat"></i>
                     </div>
                     <p class="card-desc">Digital revamp & social media integration.</p>
                     <div class="btn-group">
@@ -452,7 +456,7 @@
         </section>
 
         <section id="internal" class="fade-in">
-            <h2 class="section-title">> INTERNAL_ASSETS_DB</h2>
+            <h2 class="section-title" data-text="> INTERNAL_ASSETS_DB">> INTERNAL_ASSETS_DB</h2>
             <div class="grid-system">
                  <div class="data-card">
                     <div class="card-header">
@@ -478,7 +482,7 @@
         </section>
 
         <section id="books" class="fade-in">
-            <h2 class="section-title">> KNOWLEDGE_BASE</h2>
+            <h2 class="section-title" data-text="> KNOWLEDGE_BASE">> KNOWLEDGE_BASE</h2>
             <div class="grid-system">
                 <div class="data-card">
                     <div class="card-header">
@@ -512,7 +516,7 @@
             
             <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 450px; margin: 0 auto;">
                 <a href="https://wa.me/918667701001" class="sys-btn primary" style="padding: 1rem;">
-                    [ DIRECT_MESSAGE ]
+                    [ CHAT_ON_WHATSAPP ]
                 </a>
                 <a href="tel:+918667701001" class="sys-btn">
                     CALL: +91 8667701001
@@ -540,7 +544,7 @@
             menu.classList.toggle('active');
         }
 
-        // 3. Dynamic Typing (Fix for Layout Shift implemented via CSS min-height)
+        // 3. Dynamic Typing (Fixed Height)
         const roleText = document.querySelector('.role-text');
         const roles = [
             "FULL_STACK_DEV",
@@ -581,19 +585,50 @@
         }
         document.addEventListener('DOMContentLoaded', typeRole);
 
-        // 4. Scroll Animation (Fade In)
+        // 4. Section Title Decode Effect (New Functional Animation)
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#<>";
+        
+        function scrambleText(target) {
+            let iteration = 0;
+            const originalText = target.dataset.text || target.innerText;
+            let interval = null;
+            
+            clearInterval(interval);
+            interval = setInterval(() => {
+                target.innerText = originalText
+                    .split("")
+                    .map((letter, index) => {
+                        if(index < iteration) {
+                            return originalText[index];
+                        }
+                        return letters[Math.floor(Math.random() * 26)];
+                    })
+                    .join("");
+                
+                if(iteration >= originalText.length) {
+                    clearInterval(interval);
+                }
+                
+                iteration += 1/3;
+            }, 30);
+        }
+
+        // 5. Observer for Scroll Animations & Scramble Effect
         const observerOptions = { threshold: 0.1 };
         const fadeObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    // Trigger Scramble on Title if visible
+                    const title = entry.target.querySelector('.section-title');
+                    if(title) scrambleText(title);
                 }
             });
         }, observerOptions);
 
         document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
 
-        // 5. Stats Counter
+        // 6. Stats Counter
         const statsSection = document.getElementById('statsSection');
         let countStarted = false;
 
