@@ -19,11 +19,8 @@
             --primary-color: #ffffff;
             --accent-color: #00ffcc; /* Nexus Cyan */
             --text-dim: #666;
-            --scanline-color: rgba(255, 255, 255, 0.02);
-            
             --font-main: 'Share Tech Mono', monospace;
             --font-code: 'Fira Code', monospace;
-            
             --spacing: 20px;
         }
 
@@ -32,6 +29,10 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -48,8 +49,6 @@
         }
 
         /* --- UI COMPONENTS --- */
-        
-        /* 1. System Overlay (Scanlines) */
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -70,15 +69,15 @@
 
         a { text-decoration: none; color: inherit; cursor: pointer; }
 
-        /* --- HEADER / HUD --- */
+        /* --- HEADER & NAVIGATION --- */
         header {
             border-bottom: 1px solid var(--border-color);
-            padding: 1.5rem 0;
+            padding: 1rem 0;
             position: sticky;
             top: 0;
             background: rgba(5, 5, 5, 0.95);
-            backdrop-filter: blur(5px);
-            z-index: 100;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
         }
 
         .hud-nav {
@@ -92,22 +91,83 @@
             font-weight: 700;
             font-size: 1.2rem;
             letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-
+        
         .brand span { color: var(--accent-color); }
-
         .sys-status {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: var(--accent-color);
             border: 1px solid var(--accent-color);
-            padding: 2px 8px;
+            padding: 1px 6px;
             animation: blink 2s infinite;
+        }
+
+        /* Desktop Menu */
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--accent-color);
+        }
+        
+        .nav-item::before {
+            content: '>';
+            position: absolute;
+            left: -15px;
+            opacity: 0;
+            color: var(--accent-color);
+            transition: opacity 0.3s;
+        }
+        
+        .nav-item:hover::before { opacity: 1; }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* Mobile Menu Container */
+        .mobile-menu {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem;
+            transform: translateY(-150%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+            box-shadow: 0 10px 30px rgba(0, 255, 204, 0.1);
         }
 
         /* --- HERO TERMINAL --- */
         .terminal-section {
-            padding: 4rem 0;
-            min-height: 80vh;
+            padding: 6rem 0 4rem 0;
+            min-height: 85vh;
             display: flex;
             align-items: center;
         }
@@ -116,8 +176,9 @@
             width: 100%;
             border: 1px solid var(--border-color);
             background: var(--panel-color);
-            padding: 2rem;
+            padding: 2.5rem;
             position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
 
         .terminal-window::before {
@@ -130,13 +191,20 @@
             font-size: 0.8rem;
             color: var(--text-dim);
             font-family: var(--font-code);
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
         }
 
         .typing-container h1 {
             font-size: clamp(2rem, 5vw, 4rem);
-            line-height: 1.1;
+            line-height: 1.2;
             margin-bottom: 1rem;
             font-weight: 400;
+        }
+        
+        .role-text {
+            color: var(--accent-color);
+            position: relative;
         }
 
         .cursor {
@@ -146,57 +214,60 @@
             background-color: var(--accent-color);
             animation: blink 1s step-end infinite;
             vertical-align: text-bottom;
+            margin-left: 5px;
         }
 
         .terminal-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 3rem;
+            gap: 2rem;
+            margin-top: 4rem;
             border-top: 1px dashed var(--border-color);
             padding-top: 2rem;
         }
 
-        .stat-box {
-            font-family: var(--font-code);
-        }
-        .stat-num { font-size: 2rem; color: var(--primary-color); display: block; }
-        .stat-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; }
+        .stat-box { font-family: var(--font-code); }
+        .stat-num { font-size: 2.5rem; color: var(--primary-color); display: block; font-weight: 600; }
+        .stat-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- MODULES (Cards) --- */
+        /* --- SECTIONS COMMON --- */
+        .section-padding { padding: 4rem 0; }
+        
         .section-title {
             font-family: var(--font-code);
             font-size: 1.5rem;
-            margin-bottom: 2rem;
-            border-left: 3px solid var(--accent-color);
+            margin-bottom: 2.5rem;
+            border-left: 4px solid var(--accent-color);
             padding-left: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
+            background: linear-gradient(90deg, rgba(0,255,204,0.05), transparent);
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
         }
 
         .grid-system {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 6rem;
+            gap: 2rem;
         }
 
+        /* --- CARDS --- */
         .data-card {
             background: var(--panel-color);
             border: 1px solid var(--border-color);
-            padding: 1.5rem;
+            padding: 2rem;
             position: relative;
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }
 
         .data-card:hover {
             border-color: var(--accent-color);
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 255, 204, 0.05);
         }
 
         .data-card::after {
@@ -205,45 +276,25 @@
             top: 0; right: 0;
             width: 0; height: 0;
             border-style: solid;
-            border-width: 0 20px 20px 0;
+            border-width: 0 30px 30px 0;
             border-color: transparent var(--border-color) transparent transparent;
             transition: border-color 0.3s;
         }
 
-        .data-card:hover::after {
-            border-color: transparent var(--accent-color) transparent transparent;
-        }
+        .data-card:hover::after { border-color: transparent var(--accent-color) transparent transparent; }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .icon-box { color: var(--accent-color); }
+        .card-title { font-family: var(--font-code); font-size: 1.1rem; font-weight: 600; }
+        .card-desc { font-size: 0.95rem; color: var(--text-dim); margin-bottom: 2rem; flex-grow: 1; }
 
-        .icon-box {
-            color: var(--accent-color);
-        }
-
-        .card-title {
-            font-family: var(--font-code);
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-desc {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
-        }
-
+        /* --- BUTTONS & TAGS --- */
         .sys-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.6rem 1.2rem;
-            background: transparent;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255,255,255,0.02);
             border: 1px solid var(--border-color);
             color: var(--primary-color);
             font-family: var(--font-code);
@@ -251,7 +302,8 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: 0.3s;
-            gap: 8px;
+            gap: 10px;
+            cursor: pointer;
         }
 
         .sys-btn:hover {
@@ -260,45 +312,47 @@
             border-color: var(--accent-color);
         }
 
-        .sys-btn-full {
-            width: 100%;
-            text-align: center;
-        }
-
-        .tag-row {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
+        .tag-row { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .sys-tag {
             background: #111;
             color: #888;
             font-size: 0.7rem;
-            padding: 2px 6px;
+            padding: 4px 8px;
             border: 1px solid #222;
+            font-family: var(--font-code);
         }
 
-        /* --- SPECIAL LAB SECTION --- */
+        /* --- SPECIAL LAB --- */
         .lab-unit {
             border: 1px dashed var(--accent-color);
             background: rgba(0, 255, 204, 0.02);
-            padding: 2rem;
+            padding: 3rem;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             gap: 2rem;
-            margin-bottom: 6rem;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .lab-unit::before {
+            content: "EXPERIMENTAL // USE WITH CAUTION";
+            position: absolute;
+            bottom: 10px; right: 10px;
+            font-size: 0.6rem;
+            color: var(--accent-color);
+            opacity: 0.5;
         }
 
-        /* --- FOOTER / COMM LINK --- */
+        /* --- FOOTER --- */
         .comm-link {
             border-top: 1px solid var(--border-color);
-            padding: 4rem 0;
+            padding: 6rem 0;
             margin-top: 4rem;
             text-align: center;
+            background: linear-gradient(to top, rgba(0,0,0,1), transparent);
         }
 
         .cmd-input {
@@ -307,15 +361,29 @@
             color: var(--accent-color);
             padding: 1rem 2rem;
             font-family: var(--font-code);
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             display: inline-block;
+            box-shadow: 0 0 15px rgba(0,255,204,0.1);
+        }
+
+        /* --- MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: block; }
+            .terminal-window { padding: 1.5rem; }
+            .terminal-stats { grid-template-columns: 1fr 1fr; }
+            .grid-system { grid-template-columns: 1fr; }
+            .lab-unit { flex-direction: column; text-align: center; }
+            .sys-btn { width: 100%; }
         }
 
         /* --- ANIMATIONS --- */
-        @keyframes blink {
-            50% { opacity: 0; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        .glitch-hover:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: var(--accent-color);
         }
-
         @keyframes glitch {
             0% { transform: translate(0); }
             20% { transform: translate(-2px, 2px); }
@@ -323,20 +391,6 @@
             60% { transform: translate(2px, 2px); }
             80% { transform: translate(2px, -2px); }
             100% { transform: translate(0); }
-        }
-
-        .glitch-hover:hover {
-            animation: glitch 0.2s cubic-bezier(.25, .46, .45, .94) both infinite;
-            color: var(--accent-color);
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            .terminal-window { padding: 1.5rem 1rem; }
-            .terminal-stats { grid-template-columns: 1fr 1fr; }
-            .grid-system { grid-template-columns: 1fr; }
-            .lab-unit { flex-direction: column; text-align: center; }
-            .sys-btn { width: 100%; }
         }
     </style>
 </head>
@@ -346,8 +400,25 @@
 
     <header>
         <div class="container hud-nav">
-            <div class="brand">H24_<span>NEXUS</span></div>
-            <div class="sys-status">SYSTEM ONLINE</div>
+            <a href="#" class="brand">H24_<span>NEXUS</span> <div class="sys-status">SYS_ONLINE</div></a>
+            
+            <nav class="nav-links">
+                <a href="#skills" class="nav-item">CAPABILITIES</a>
+                <a href="#work" class="nav-item">DEPLOYMENTS</a>
+                <a href="#lab" class="nav-item">LAB</a>
+                <a href="#contact" class="nav-item">COMM_LINK</a>
+            </nav>
+
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i data-feather="menu"></i>
+            </div>
+        </div>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#skills" class="nav-item" onclick="toggleMenu()">CAPABILITIES_MOD</a>
+            <a href="#work" class="nav-item" onclick="toggleMenu()">DEPLOYMENTS_DB</a>
+            <a href="#lab" class="nav-item" onclick="toggleMenu()">LAB_TERMINAL</a>
+            <a href="#contact" class="nav-item" onclick="toggleMenu()">ESTABLISH_UPLINK</a>
         </div>
     </header>
 
@@ -357,68 +428,80 @@
             <div class="terminal-window">
                 <div class="typing-container">
                     <p style="color: var(--text-dim); font-family: var(--font-code); margin-bottom: 1rem;">> INITIALIZING USER PROFILE...</p>
-                    <h1>IDENTITY: <span style="color: #fff;">HARSHA VARTHAN E P</span><br>
-                    ROLE: <span style="color: var(--accent-color);">FULL_STACK_DEV</span><span class="cursor"></span></h1>
+                    <h1>
+                        IDENTITY: <span style="color: #fff;">HARSHA VARTHAN E P</span><br>
+                        ROLE: <span class="role-text"></span><span class="cursor"></span>
+                    </h1>
                     
-                    <p style="margin-top: 2rem; max-width: 600px; color: #ccc;">
+                    <p style="margin-top: 2rem; max-width: 600px; color: #ccc; font-size: 1.1rem;">
                         // ARCHITECTING DIGITAL ECOSYSTEMS.<br>
-                        // FROM ANDROID KERNELS TO WEB INFRASTRUCTURE.
+                        // CONVERGING CODE, DESIGN & BRAND STRATEGY.
                     </p>
 
-                    <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div style="margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
                          <a href="#work" class="sys-btn glitch-hover">[ EXECUTE_PORTFOLIO ]</a>
                          <a href="https://wa.me/918667701001" target="_blank" class="sys-btn glitch-hover" style="border-color: var(--accent-color); color: var(--accent-color);">[ COMM_LINK_WHATSAPP ]</a>
                     </div>
                 </div>
 
-                <div class="terminal-stats">
+                <div class="terminal-stats" id="statsSection">
                     <div class="stat-box">
-                        <span class="stat-num" data-val="5">05+</span>
+                        <span class="stat-num" data-val="5">0</span>
                         <span class="stat-label">Years_Exp</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-num" data-val="20">20+</span>
+                        <span class="stat-num" data-val="20">0</span>
                         <span class="stat-label">Projects_Compiled</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-num" data-val="10">10+</span>
+                        <span class="stat-num" data-val="10">0</span>
                         <span class="stat-label">Apps_Deployed</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-num" data-val="2">02</span>
+                        <span class="stat-num" data-val="2">0</span>
                         <span class="stat-label">Books_Authored</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <h2 class="section-title">> SYSTEM_CAPABILITIES</h2>
-        <div class="grid-system">
-            <div class="data-card">
-                <div class="card-header">
-                    <span class="card-title">WEB_DEV_MODULE</span>
-                    <i data-feather="monitor" class="icon-box"></i>
+        <section id="skills" class="section-padding">
+            <h2 class="section-title">> SYSTEM_CAPABILITIES</h2>
+            <div class="grid-system">
+                <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">FULL_STACK_DEV</span>
+                        <i data-feather="monitor" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">Robust web architecture. React.js ecosystems. High-performance SEO & server-side logic.</p>
+                    <div class="tag-row"><span class="sys-tag">HTML5</span><span class="sys-tag">REACT</span><span class="sys-tag">NODE</span></div>
                 </div>
-                <p class="card-desc">High-performance SEO architecture. Responsive layouts. Client conversion protocols.</p>
-                <div class="tag-row"><span class="sys-tag">HTML5</span><span class="sys-tag">REACT</span></div>
-            </div>
-            <div class="data-card">
-                <div class="card-header">
-                    <span class="card-title">ANDROID_CORE</span>
-                    <i data-feather="smartphone" class="icon-box"></i>
+                <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">VISUAL_ARCHITECT</span>
+                        <i data-feather="pen-tool" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">Brand Identity Systems. UI/UX Interface Design. Stealth Aesthetics & Graphics.</p>
+                    <div class="tag-row"><span class="sys-tag">FIGMA</span><span class="sys-tag">ADOBE_CC</span></div>
                 </div>
-                <p class="card-desc">Native application development. Play Store deployment & optimization.</p>
-                <div class="tag-row"><span class="sys-tag">JAVA</span><span class="sys-tag">XML</span></div>
-            </div>
-            <div class="data-card">
-                <div class="card-header">
-                    <span class="card-title">VISUAL_DESIGN</span>
-                    <i data-feather="pen-tool" class="icon-box"></i>
+                <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">BRAND_STRATEGIST</span>
+                        <i data-feather="target" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">Digital presence optimization. Market positioning. Identity cohesion across platforms.</p>
+                    <div class="tag-row"><span class="sys-tag">STRATEGY</span><span class="sys-tag">IDENTITY</span></div>
                 </div>
-                <p class="card-desc">Stealth aesthetics. Brand identity systems. UI/UX interfaces.</p>
-                <div class="tag-row"><span class="sys-tag">ADOBE</span><span class="sys-tag">FIGMA</span></div>
+                <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">ANDROID_CORE</span>
+                        <i data-feather="smartphone" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">Native Java/XML development. Play Store deployment & ASO optimization.</p>
+                    <div class="tag-row"><span class="sys-tag">JAVA</span><span class="sys-tag">XML</span></div>
+                </div>
             </div>
-        </div>
+        </section>
 
         <div class="lab-unit" id="lab">
             <div>
@@ -430,78 +513,82 @@
             </a>
         </div>
 
-        <h2 class="section-title" id="work">> CLIENT_DEPLOYMENTS</h2>
-        <div class="grid-system">
-            <div class="data-card">
-                <div class="card-header">
-                    <span class="card-title">DAP_FITNESS</span>
-                    <i data-feather="activity" class="icon-box"></i>
+        <section id="work" class="section-padding">
+            <h2 class="section-title">> CLIENT_DEPLOYMENTS</h2>
+            <div class="grid-system">
+                <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">DAP_FITNESS</span>
+                        <i data-feather="activity" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">Modern fitness platform. Optimized for local SEO visibility.</p>
+                    <a href="https://dap-fitness-studio-web.vercel.app/" target="_blank" class="sys-btn">VISIT_SITE</a>
                 </div>
-                <p class="card-desc">Modern fitness platform. Optimized for local SEO visibility.</p>
-                <a href="https://dap-fitness-studio-web.vercel.app/" target="_blank" class="sys-btn">VISIT_SITE</a>
-            </div>
-            <div class="data-card">
-                <div class="card-header">
-                    <span class="card-title">ARJUNA_HOSPITAL</span>
-                    <i data-feather="plus-square" class="icon-box"></i>
+                <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">ARJUNA_HOSPITAL</span>
+                        <i data-feather="plus-square" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">Medical CMS & Content Strategy. Search ranking optimization.</p>
+                    <a href="https://www.arjunahospital.in" target="_blank" class="sys-btn">VISIT_SITE</a>
                 </div>
-                <p class="card-desc">Medical CMS & Content Strategy. Search ranking optimization.</p>
-                <a href="https://www.arjunahospital.in" target="_blank" class="sys-btn">VISIT_SITE</a>
-            </div>
-            <div class="data-card">
-                <div class="card-header">
-                    <span class="card-title">LKS_POLYCLINIC</span>
-                    <i data-feather="heart" class="icon-box"></i>
+                <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">LKS_POLYCLINIC</span>
+                        <i data-feather="heart" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">Digital revamp & social media integration.</p>
+                    <a href="https://www.lkspolyclinic.com" target="_blank" class="sys-btn">VISIT_SITE</a>
                 </div>
-                <p class="card-desc">Digital revamp & social media integration.</p>
-                <a href="https://www.lkspolyclinic.com" target="_blank" class="sys-btn">VISIT_SITE</a>
             </div>
-        </div>
+        </section>
 
-        <h2 class="section-title" id="apps">> INTERNAL_ASSETS</h2>
-        <div class="grid-system">
-             <div class="data-card">
-                <div class="card-header">
-                    <span class="card-title">PLAY_STORE_DB</span>
-                    <i data-feather="smartphone" class="icon-box"></i>
+        <section id="internal" class="section-padding">
+            <h2 class="section-title">> INTERNAL_ASSETS</h2>
+            <div class="grid-system">
+                 <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">PLAY_STORE_DB</span>
+                        <i data-feather="smartphone" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">10+ Apps. Confident Candidate, Aegan, and Utilities.</p>
+                    <a href="https://play.google.com/store/apps/dev?id=8039460198278259208" target="_blank" class="sys-btn">ACCESS_DB</a>
                 </div>
-                <p class="card-desc">10+ Apps. Confident Candidate, Aegan, and Utilities.</p>
-                <a href="https://play.google.com/store/apps/dev?id=8039460198278259208" target="_blank" class="sys-btn">ACCESS_DB</a>
-            </div>
-            <div class="data-card">
-                <div class="card-header">
-                    <span class="card-title">DESIGN_VAULT</span>
-                    <i data-feather="folder" class="icon-box"></i>
+                <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">DESIGN_VAULT</span>
+                        <i data-feather="folder" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">Graphic Design Portfolio. Drive Access required.</p>
+                    <a href="https://drive.google.com/drive/folders/1gS8AA5x-DoGLNGvXPDyXu_a4bJl2q08c?usp=sharing" target="_blank" class="sys-btn">REQ_ACCESS</a>
                 </div>
-                <p class="card-desc">Graphic Design Portfolio. Drive Access required.</p>
-                <a href="https://drive.google.com/drive/folders/1gS8AA5x-DoGLNGvXPDyXu_a4bJl2q08c?usp=sharing" target="_blank" class="sys-btn">REQ_ACCESS</a>
             </div>
-        </div>
+        </section>
 
-        <h2 class="section-title" id="books">> KNOWLEDGE_BASE</h2>
-        <div class="grid-system">
-            <div class="data-card">
-                <div class="card-header">
-                    <span class="card-title">MIND_FEAST</span>
-                    <i data-feather="book" class="icon-box"></i>
+        <section id="books" class="section-padding">
+            <h2 class="section-title">> KNOWLEDGE_BASE</h2>
+            <div class="grid-system">
+                <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">MIND_FEAST</span>
+                        <i data-feather="book" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">Guide to self-esteem and personality dev.</p>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="https://www.flipkart.com/search?q=Mind%20Feast%20Harsha%20Varthan" target="_blank" class="sys-btn" style="width:100%">FLIPKART</a>
+                        <a href="https://www.amazon.in/s?k=Mind+Feast+Harsha+Varthan" target="_blank" class="sys-btn" style="width:100%">AMAZON</a>
+                    </div>
                 </div>
-                <p class="card-desc">Guide to self-esteem and personality dev.</p>
-                <div style="display: flex; gap: 10px;">
-                    <a href="https://www.flipkart.com/search?q=Mind%20Feast%20Harsha%20Varthan" target="_blank" class="sys-btn sys-btn-full" style="background: #fff; color: #000; border-color:#fff;">FLIPKART</a>
-                    <a href="https://www.amazon.in/s?k=Mind+Feast+Harsha+Varthan" target="_blank" class="sys-btn sys-btn-full" style="background: #fff; color: #000; border-color:#fff;">AMAZON</a>
+                <div class="data-card">
+                    <div class="card-header">
+                        <span class="card-title">INSPIRING_ILLUSIONS</span>
+                        <i data-feather="book-open" class="icon-box"></i>
+                    </div>
+                    <p class="card-desc">Unique quotes for deep thinkers.</p>
+                    <a href="https://www.amazon.in/s?k=Inspiring+Illusions+Harsha+Varthan" target="_blank" class="sys-btn" style="width:100%">AMAZON</a>
                 </div>
             </div>
-            <div class="data-card">
-                <div class="card-header">
-                    <span class="card-title">INSPIRING_ILLUSIONS</span>
-                    <i data-feather="book-open" class="icon-box"></i>
-                </div>
-                <p class="card-desc">Unique quotes for deep thinkers.</p>
-                <div style="display: flex; gap: 10px;">
-                    <a href="https://www.amazon.in/s?k=Inspiring+Illusions+Harsha+Varthan" target="_blank" class="sys-btn sys-btn-full" style="background: #fff; color: #000; border-color:#fff;">AMAZON</a>
-                </div>
-            </div>
-        </div>
+        </section>
 
         <section class="comm-link" id="contact">
             <div class="cmd-input">
@@ -510,55 +597,118 @@
             <h2 style="font-size: 2rem; margin-bottom: 2rem;">READY TO COLLABORATE?</h2>
             
             <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margin: 0 auto;">
-                <a href="https://wa.me/918667701001" class="sys-btn sys-btn-full glitch-hover" style="border-color: var(--accent-color); color: var(--accent-color); padding: 1rem;">
+                <a href="https://wa.me/918667701001" class="sys-btn glitch-hover" style="border-color: var(--accent-color); color: var(--accent-color); padding: 1rem;">
                     [ OPEN_WHATSAPP_CHANNEL ]
                 </a>
-                <a href="tel:+918667701001" class="sys-btn sys-btn-full">
+                <a href="tel:+918667701001" class="sys-btn">
                     CALL: +91 8667701001
                 </a>
-                <a href="mailto:h24creationz@gmail.com" class="sys-btn sys-btn-full">
+                <a href="mailto:h24creationz@gmail.com" class="sys-btn">
                     MAIL: H24CREATIONZ@GMAIL.COM
                 </a>
             </div>
 
-            <div style="margin-top: 3rem; opacity: 0.5; font-size: 0.8rem;">
-                H24_NEXUS_VER_2.6 // COPYRIGHT 2026
+            <div style="margin-top: 4rem; opacity: 0.5; font-size: 0.8rem; font-family: var(--font-code);">
+                H24_NEXUS_VER_3.0 // COPYRIGHT 2026
             </div>
         </section>
 
     </main>
 
     <script>
+        // Init Icons
         feather.replace();
 
-        // Typing Effect simulation
-        const titleText = "HARSHA VARTHAN E P";
-        
-        // Number Counter
-        const counters = document.querySelectorAll('.stat-num');
-        const speed = 100;
+        // --- 1. MENU TOGGLE LOGIC ---
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
 
-        const animateCounters = () => {
+        // --- 2. DYNAMIC TYPING EFFECT ---
+        const roleElement = document.querySelector('.role-text');
+        const roles = [
+            "FULL_STACK_DEV",
+            "VISUAL_ARCHITECT",
+            "BRAND_STRATEGIST",
+            "DIGITAL_MARKETER",
+            "ECOSYSTEM_CREATOR"
+        ];
+        
+        let roleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+
+        function typeRole() {
+            const currentRole = roles[roleIndex];
+            
+            if (isDeleting) {
+                roleElement.textContent = currentRole.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 50; // Faster deletion
+            } else {
+                roleElement.textContent = currentRole.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 100; // Normal typing
+            }
+
+            if (!isDeleting && charIndex === currentRole.length) {
+                // Finished typing word, pause before deleting
+                isDeleting = true;
+                typeSpeed = 2000; 
+            } else if (isDeleting && charIndex === 0) {
+                // Finished deleting, move to next word
+                isDeleting = false;
+                roleIndex = (roleIndex + 1) % roles.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeRole, typeSpeed);
+        }
+
+        // Start Typing on Load
+        document.addEventListener('DOMContentLoaded', typeRole);
+
+        // --- 3. SCROLL-TRIGGERED NUMBER COUNTER ---
+        const statsSection = document.getElementById('statsSection');
+        const counters = document.querySelectorAll('.stat-num');
+        let started = false; // Function run switch
+
+        function startCounters() {
             counters.forEach(counter => {
+                const target = +counter.getAttribute('data-val');
+                const duration = 2000; // Animation duration in ms
+                const increment = target / (duration / 20); // Calculate increment per 20ms frame
+                
+                let current = 0;
                 const updateCount = () => {
-                    const target = +counter.getAttribute('data-val');
-                    const count = +counter.innerText.replace('+','');
-                    const inc = target / speed;
-                    
-                    if(count < target) {
-                        counter.innerText = Math.ceil(count + inc) + "+";
-                        setTimeout(updateCount, 40);
+                    current += increment;
+                    if(current < target) {
+                        counter.innerText = Math.ceil(current) + "+";
+                        setTimeout(updateCount, 20);
                     } else {
                         counter.innerText = target + "+";
-                        if(target === 2) counter.innerText = "02"; // Fix for book count
+                        // Specific fix for small numbers (like 2)
+                        if(target < 5) counter.innerText = "0" + target;
                     }
-                }
+                };
                 updateCount();
             });
         }
-        
-        // Trigger stats on load for that "System Boot" feel
-        window.addEventListener('load', animateCounters);
+
+        // Intersection Observer to trigger stats only when visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting && !started) {
+                    startCounters();
+                    started = true;
+                }
+            });
+        }, { threshold: 0.5 }); // Trigger when 50% of the section is visible
+
+        observer.observe(statsSection);
+
     </script>
 </body>
 </html>
